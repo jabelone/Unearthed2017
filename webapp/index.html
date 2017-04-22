@@ -138,6 +138,36 @@
 			height:60px;
 			background: #000;
 		}
+
+		div#wrapper div#footer div#footWrapper {
+			position: relative;
+		    width: 100%;
+		    height: 100%;
+		}
+
+		div#wrapper div#footer div#footWrapper>div {
+			float:left;
+			width:33.333%;
+			height:100%;
+			background:#000;
+			color:#eee;
+			text-align: center;
+			line-height: 60px;
+		}
+		
+		div#wrapper div#footer div#footWrapper div#AuthorPanel div#List {
+			margin: 2.5px 0 0 5px;
+		}
+
+		div#wrapper div#footer div#footWrapper div#AuthorPanel div#List div {
+			line-height:12px;
+			font-size:0.7em;
+			text-align: left;
+		}
+
+		div#wrapper div#footer div#footWrapper div:not(:first-child) {
+			font-size:2.5em;
+		}
       </style>
    </head>
    <body>
@@ -199,17 +229,82 @@
          </div>
          <div id="footer">
 	         <div id="footWrapper">
-	         	<div id="HackathonPanel">
-	         		<span></span>
+	         	<div id="AuthorPanel">
+	         		<div id="List">
+
+	         			<div id="Author">
+	         				<span>Jaimyn Mayer</span>
+	         			</div>
+	         			<div id="Author">
+	         				<span>Jack Glendenning</span>
+	         			</div>
+	         			<div id="Author">
+	         				<span>Myles Wardell</span>
+	         			</div>
+	         			<div id="Author">
+	         				<span>Shravan Lal</span>
+	         			</div>
+	         			<div id="Author">
+	         				<span>Arun Harish Balasubramonian</span>
+	         			</div>
+	         		</div>
 	         	</div>
-	         	<div id="TeamPanel">
-	         		
+	         	<div id="HackathonPanel">
+	         		<span>Underpressure</span>
 	         	</div>
 	         	<div id="YearPanel">
-	         		
+	         		<span>2017</span>
 	         	</div>
 	         </div>
          </div>
       </div>
+      <script type = "text/javascript">
+
+      (function(w,s,d) {
+      	
+      	var a = new XMLHttpRequest();
+      	var b = {};
+      	var dom = [
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#pressure>span#reading', dlabel: 'cpress'},
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_1>div#valueLabel>span#val',
+      	dlabel:'alabel'}, 
+
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_2>div#valueLabel>span#val',
+      	dlabel:'wlevel'},
+
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_3>div#valueLabel>span#val',
+      	dlabel:'dlabel'}];
+
+
+      	setInterval(function() {
+      		a.open("GET", "data/live.json");
+      		a.send();	
+      	}, 500);
+      	
+      	
+
+      	function render() {
+      		for(var x = 0; x < dom.length; x++) {
+      			
+      			var k = d.querySelector(dom[x].DOM);
+      			var t = d.createTextNode(b[dom[x].dlabel]);
+
+      			k.removeChild(k.lastChild);
+      			k.appendChild(t);
+
+      		}
+      	}
+
+      	a.addEventListener("load",function() {
+      		b = 
+      		JSON.parse(a.responseText);
+
+
+      		render();
+      	});
+
+
+      })(window, screen, document);
+      </script>
    </body>
 </html>
