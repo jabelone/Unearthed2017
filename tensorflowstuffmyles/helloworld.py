@@ -11,9 +11,7 @@ import tensorflow as tf
 
 import csv
 
-
-
-
+# Weights and Biases
 def getNetGraph(X, h1size):
     with tf.name_scope('hidden'):
         weights = tf.random_normal([tf.size(X), h1size], name='weights')
@@ -27,6 +25,7 @@ def getNetGraph(X, h1size):
     
     return output
 
+## Loss reduce at all cost
 def loss(X, target):
     #squared loss
     return tf.pow(X - target, 2)
@@ -34,6 +33,7 @@ def loss(X, target):
 def pruneRow(row, columnIndexes, targetColIndex):
     return ([row[index] for index in columnIndexes], row[targetColIndex])
 
+# Constants
 featuresColNames = ['Casing Pressure',
                     'Gas Flow (Volume)',
                     'Motor Speed',
@@ -44,8 +44,8 @@ featuresColNames = ['Casing Pressure',
                     'Water Flow Mag from Separator']
 targetColName = 'Downhole Gauge Pressure'
 
-with open('D:/unearthed/Bottom Hole Pressure and Fluid Level Challenge/Data/Well1B3mths.csv',
-              newline='') as csvfile:
+# Open CSV file
+with open('Well1B3mths.csv', newline='') as csvfile:
 
     csvreader = csv.reader(csvfile)
 
