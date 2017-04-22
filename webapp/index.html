@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Live Pressure</title>
+      <style>
+         body {
+         font-family:'monospace';
+         user-select:none;
+         cursor:default;
+         }
+         div#wrapper {
+         position:absolute;
+         width:100%;
+         height: 100%;
+         top:0;
+         left:0;
+         }
+         div#wrapper>div {
+         width:100%;
+         }
+         div#wrapper div#top {
+         position:absolute;
+         height:60px;
+         background:#111;
+         text-align: center;
+         color:#eee;
+         }
+         div#wrapper div#top div {
+         float:left;
+         }
+         div#wrapper div#top div#logo {
+         width:250px;
+         height:100%;
+         background:#222;
+         }
+         div#wrapper div#top div#title {
+         position:absolute;
+         width:100%;
+         height:100%;
+         text-align: center;
+         line-height: 60px;
+         }
+         div#wrapper div#top div#title span {
+         font-size:2em;
+         }
+         /*Content here */
+         div#wrapper>div#content {
+         position: absolute;
+         top:50px;
+         width:100%;
+         left:0;
+         height:500px;
+         }
+         div#wrapper>div#content>div#cwrapper {
+         position: relative;
+         top:50px;
+         width:100%;
+         height:400px;
+         }
+         div#wrapper>div#content>div#cwrapper>div#main {
+         width:100%;
+         height:350px;
+         }
+         div#content div#cwrapper div#main div#txt {
+         width:100%;
+         height:100%;
+         }
+         div#content div#cwrapper div#main div#txt div#pressureWrapper {
+         position: relative;
+         top: 25%;
+         height: 50%;
+         text-align: center;
+         }
+         div#content div#cwrapper div#main div#txt div#pressureWrapper div#pressure {
+         display: inline-block;
+         background:#000;
+         color:#eee;
+         }
+         div#content div#cwrapper div#main div#txt
+         div#pressureWrapper span#reading {
+         font-size:7.5em;
+         }
+         div#content div#cwrapper div#main div#txt 
+         div#pressureWrapper span#unit {
+         font-size:2.5em;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="wrapper">
+         <div id = "top">
+            <div id="logo">
+               <div id="holder">
+               </div>
+            </div>
+            <div id="title">
+               <span>Live Pressure</span>	
+            </div>
+         </div>
+         <div id="content">
+            <div id = "cwrapper">
+               <div id="main">
+                  <div id = "txt">
+                     <div id = "pressureWrapper">
+                        <div id="pressure">
+                           <span id = "reading">1220.02</span>
+                           <span id = "unit">KPa</span>	
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div id="footer">
+         </div>
+      </div>
+   </body>
+</html>
