@@ -10,54 +10,98 @@ from __future__ import print_function
 import tensorflow as tf
 
 import csv
-
+import time
 
 
 
 def getNetGraph(X, h1size):
     with tf.name_scope('hidden'):
-        weights = tf.random_normal([tf.size(X), h1size], name='weights')
-        biases = tf.zeros([h1size], tf.float32)
-        hidden1 = tf.nn.relu(tf.matmul(X, weights) + biases)
+        weights = tf.Variable(tf.random_normal([tf.size(X), h1size]), name='weights')
+        biases = tf.Variable(tf.zeros([h1size], tf.float32), name='biases')
+        hidden1 = tf.nn.relu(tf.matmul(X, weights)) + biases
         
     with tf.name_scope('output'):
-        weights = tf.random_normal([h1size, 1], name='weights')
-        bias = tf.constant(0, name='bias', dtype=tf.float32)
-        output = tf.Variable(tf.matmul(hidden1, weights) + bias)
+        weights = tf.Variable(tf.random_normal([h1size, 1]), name='weights')
+#        weights = tf.Print(weights, [weights])
+        bias = tf.Variable(0.00, tf.float32, name='bias')
+        output = tf.matmul(hidden1, weights) + bias
     
     return output
 
 def loss(X, target):
-    #squared loss
-    return tf.pow(X - target, 2)
+    #abs loss
+    return tf.abs(X - target)
 
+def pruneRow(row, columnIndexes, targetColIndex):
+    prunedRow = [0 if row[index] == 'NULL' else row[index] for index in columnIndexes]
+    return (prunedRow, row[targetColIndex])
 
+featuresColNames = ['Casing Pressure',
+                    'Gas Flow (Volume)',
+                    'Motor Speed',
+                    'Motor Torque',
+                    'Pump Speed Actual',
+                    'Tubing Flow Meter',
+                    'Tubing Pressure',
+                    'Water Flow Mag from Separator']
+targetColName = 'Downhole Gauge Pressure'
 
-learning_rate = 0.005
-hiddenLayerSize = 5
+with open('D:/unearthed/Bottom Hole Pressure and Fluid Level Challenge/Data/Well1B3mths.csv',
+              newline='') as csvFile:
 
-trainX = tf.constant([[1,1,1,1,1]], dtype=tf.float32, shape=[1,5], name='input')
-targetVal = tf.constant(30, dtype=tf.float32)
+    csvReader = csv.reader(csvFile)
 
+    allColNames = next(csvReader)
+    featuresColIndexes = [allColNames.index(name) for name in featuresColNames]
+    targetColIndex = allColNames.index(targetColName)
 
-inputPlaceholder = tf.placeholder(tf.float32, shape = [1,5])
-netGraph = getNetGraph(inputPlaceholder, hiddenLayerSize)
+    print("feature column indexes", featuresColIndexes)
+    print("target column index", targetColIndex)
 
-lossVal = loss(netGraph, targetVal)
-trainOp = tf.train.GradientDescentOptimizer(learning_rate).minimize(lossVal)
-
-global sess
-sess = tf.Session()
-init = tf.global_variables_initializer()
-
-sess.run(init, feed_dict={inputPlaceholder: [[1,2,3,4,5]]})
-#
-#for epoch in range(1000):
-#    sess.run(trainOp, feed_dict={inputPlaceholder: trainX})
-
-
-print(sess.run(netGraph, feed_dict={inputPlaceholder: [[1,2,3,4,5]]}))
-
-sess.close()
+    learning_rate = 0.00005
+    learning_iterations = 100
+    hiddenLayerSize = 8
     
+#    trainingSet = [pruneRow(next(csvReader), featuresColIndexes, targetColIndex)
+#                   for i in range(100)]
+    
+    
+    trainX = [[1,2,3,4,5,6,7,8]]
+    target = [[30]]
+
+    tf.set_random_seed(time.time())
+    
+    targetPlaceholder = tf.placeholder(tf.float32, shape=[1,1], name='phTarget')
+    inputPlaceholder = tf.placeholder(tf.float32, shape = [1,len(featuresColIndexes)], name='phIn')
+    netGraph = getNetGraph(inputPlaceholder, hiddenLayerSize)
+
+    lossVal = loss(netGraph, targetPlaceholder)
+    trainOp = tf.train.GradientDescentOptimizer(learning_rate).minimize(lossVal)
+
+    sess = tf.Session()
+    init = tf.global_variables_initializer()
+
+    sess.run(init, feed_dict={inputPlaceholder: trainX, targetPlaceholder: target})
+    
+    testSet = [next(csvReader) for i in range(50)]
+    
+    x = 0
+    for line in csvReader:
+        x = x + 1
+        if x > 5000: break
+        pruned = pruneRow(line, featuresColIndexes, targetColIndex)
+#        print("Train row " + str(i) + ":", pruned)
+#        for epoch in range(learning_iterations):
+        sess.run(trainOp, feed_dict={inputPlaceholder: [pruned[0]],
+                                         targetPlaceholder: [[pruned[1]]]})
+#        print(sess.run(lossVal, feed_dict={inputPlaceholder: [pruned[0]],
+#                                         targetPlaceholder: [[pruned[1]]]}))
+
+    for i in range(len(testSet)):
+        testRow = pruneRow(testSet[i], featuresColIndexes, targetColIndex)
+        print ("Test Row " + str(i) + ":", testRow[1])
+        print(sess.run(netGraph, feed_dict={inputPlaceholder: [testRow[0]]}))
+
+    sess.close()
+
 

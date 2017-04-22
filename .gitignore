@@ -92,4 +92,5 @@ ENV/
 .idea/misc.xml
 .idea/modules.xml
 .idea/workspace.xml
-.csv
+*.csv
+~$Fluid Level - Data Dictionary.xlsx
