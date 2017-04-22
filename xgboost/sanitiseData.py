@@ -1,46 +1,55 @@
-import os
-import random
-from shutil import copyfile
+import os, csv, pickle
 
-totalFiles = 0
+# Get the current working directory and all files
+mypath = os.getcwd()
+files = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
 
-fileNames = os.listdir(os.getcwd())
-stringOfFiles = ""
+# Store our sanitised and combined csv
+sanitisedCSV = [{}]
+combinedCSV = [{}]
 iteration = 0
+nulls = 0
 
-if not os.path.exists("randomly_sorted"):
-    os.makedirs("randomly_sorted")
+# Pop all the non csv files
+for index, name in enumerate(files):
+    if ".csv" in name:
+        pass
+    else:
+        files.pop(index)
+print("Will combine all these ({} in total): ".format(len(files)))
+print(files)
+print("\n")
 
-for file in fileNames:
-    if file.endswith(".jpg") or file.endswith(".JPG") or file.endswith(".png") or file.endswith(".PNG"):
-        filteredFileNames.append(file)
-        if os.path.exists("randomly_sorted/" + file):
-            os.remove("randomly_sorted/" + file)
+for i, dataset in enumerate(files):
+    with open(dataset) as file:
+        # Read the current file into a variable
+        reader = csv.DictReader(file)
 
-        if not os.path.exists("randomly_sorted/" + file + "_temp"):
-            copyfile(file, "randomly_sorted/" + file + "_temp")
-        else:
-            os.remove("randomly_sorted/" + file + "_temp")
-            copyfile(file, "randomly_sorted/" + file + "_temp")
+        currentWell = files[i][4:6]
 
-values = list(range(len(filteredFileNames)))
-random.shuffle(values)
+        print("Working on {} of {}".format(i, len(files)))
+        print("Processing well: ")
+        print(currentWell)
 
-for file in filteredFileNames:
-    file += ", "
-    stringOfFiles += file
-    newNames[file] = iteration
-    iteration += 1
+        for index, row in enumerate(reader):
+            if "NULL" in row:
+                nulls += 1
+                continue
+            sanitisedCSV.append({})
+            sanitisedCSV[index]["Well"] = currentWell
+            sanitisedCSV[index]["Downhole Gauge Pressure"] = row["Downhole Gauge Pressure"]
+            sanitisedCSV[index]["Casing Pressure"] = row["Casing Pressure"]
+            sanitisedCSV[index]["Gas Flow (Volume)"] = row["Gas Flow (Volume)"]
+            sanitisedCSV[index]["Motor Speed"] = row["Motor Speed"]
+            sanitisedCSV[index]["Motor Torque"] = row["Motor Torque"]
+            sanitisedCSV[index]["Pump Speed Actual"] = row["Pump Speed Actual"]
+            sanitisedCSV[index]["Tubing Flow Meter"] = row["Tubing Flow Meter"]
+            sanitisedCSV[index]["Tubing Pressure"] = row["Tubing Pressure"]
+            sanitisedCSV[index]["Tubing Size Type"] = row["Tubing Size Type"]
+            sanitisedCSV[index]["Water Flow Mag from Separator"] = row["Water Flow Mag from Separator"]
 
-print("These files will be randomised: " + stringOfFiles)
-print("The total files to randomise is: " + str(len(filteredFileNames)))
-iteration = 0
+        print("Found {} nulls in this dataset.  I have purged the unwanted.".format(nulls))
 
-for file in filteredFileNames:
-    if os.path.exists("randomly_sorted/" + file):
-        os.remove("randomly_sorted/" + file)
-    if os.path.exists("randomly_sorted/" + str(values[iteration]) + ".jpg"):
-        os.remove("randomly_sorted/" + str(values[iteration]) + ".jpg")
-
-    os.rename("randomly_sorted/" + file + "_temp", "randomly_sorted/" + str(values[iteration]) + ".jpg")
-    iteration += 1
+print("There was {} nulls in all of the datasets.  I have purged the unwanted.".format(nulls))
+with open("sanitisedData.txt", "wb") as dataFile:
+    pickle.dump(sanitisedCSV, dataFile)
