@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea/Unearthed2017.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+.csv
