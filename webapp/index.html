@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -66,25 +67,66 @@
          width:100%;
          height:100%;
          }
-         div#content div#cwrapper div#main div#txt div#pressureWrapper {
-         position: relative;
-         top: 25%;
-         height: 50%;
-         text-align: center;
+         div#content div#cwrapper div#main div#txt>div#txtWrapper {
+	         position: relative;
+	         top: 25%;
+	         height: 200px;
+	         text-align: center;
+	         line-height:140px;
+	         overflow:hidden;
          }
-         div#content div#cwrapper div#main div#txt div#pressureWrapper div#pressure {
-         display: inline-block;
-         background:#000;
-         color:#eee;
-         }
+         div#content div#cwrapper div#main div#txt div#txtWrapper div#pressure {
+             background: #000;
+			 color: #eee;
+			 height: 140px;
+			 width: 590px;
+			 margin: auto;
+		 }
+
          div#content div#cwrapper div#main div#txt
-         div#pressureWrapper span#reading {
+         div#txtWrapper span#reading {
          font-size:7.5em;
          }
          div#content div#cwrapper div#main div#txt 
-         div#pressureWrapper span#unit {
+         div#txtWrapper span#unit {
          font-size:2.5em;
          }
+
+         div#content div#cwrapper div#main div#txt
+         div#txtWrapper div#panelWrapper {
+         	position:relative;
+         	width: 590px;
+		    height: 60px;
+		    margin: auto;
+		    background:#000;
+         }
+		
+		div#content div#cwrapper div#main div#txt
+         div#txtWrapper div#panelWrapper div#panels {
+         	width:100%;
+         	height:60px;
+         }
+		
+		div#content div#cwrapper div#main div#txt div#txtWrapper
+		div#panelWrapper div#panels div[id^="panel_"] {
+			float:left;
+			width:33.3333%;
+			height:60px;
+			background: #111;
+			color:#eee;
+		}
+
+		div#content div#cwrapper div#main div#txt div#txtWrapper
+		div#panelWrapper div#panels div[id^="panel_"] div#panelLabel {
+			height:30px;
+			line-height:30px;
+		}
+
+		div#content div#cwrapper div#main div#txt div#txtWrapper
+		div#panelWrapper div#panels div[id^="panel_"] div#valueLabel {
+			height:30px;
+			line-height:30px;
+		}
       </style>
    </head>
    <body>
@@ -102,17 +144,52 @@
             <div id = "cwrapper">
                <div id="main">
                   <div id = "txt">
-                     <div id = "pressureWrapper">
+                     <div id = "txtWrapper">
                         <div id="pressure">
-                           <span id = "reading">1220.02</span>
-                           <span id = "unit">KPa</span>	
+                           <span id = "reading">1223.42</span>
+                           <span id = "unit">kPa</span>	
                         </div>
+                        <div id="panelWrapper">
+                     		<div id="panels">
+                     			<div id="panel_1">
+                     				<div id="panelLabel">
+                     					<span id = "lab">Accuracy:</span>
+                     				</div>
+                     				<div id="valueLabel">
+                     					<span id="val">95</span>
+                     					<span id="siunit">%</span>
+                     				</div>
+                     			</div>
+                     			<div id="panel_2">
+                     				<div id="panelLabel">
+                     					<span id = "lab">Water Level:</span>
+                     				</div>
+                     				<div id="valueLabel">
+                     					<span id="val">207.97</span>
+                     					<span id="siunit">L</span>
+                     				</div>
+                     			</div>
+                     			<div id="panel_3">
+                     				<div id="panelLabel">
+                     					<span id = "lab">Depth:</span>
+                     				</div>
+                     				<div id="valueLabel">
+                     					<span id="val">185</span>
+                     					<span id="siunit">m</span>
+                     				</div>
+                     			</div>
+                     		</div>
+                     	</div>
                      </div>
+                     
                   </div>
                </div>
             </div>
          </div>
          <div id="footer">
+	         <div id="footWrapper">
+	         	
+	         </div>
          </div>
       </div>
    </body>
