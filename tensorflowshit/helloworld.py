@@ -17,13 +17,15 @@ inputVarNum = 10
 def getNetGraph(X, h1size):
     with tf.name_scope('hidden'):
         weights = tf.random_normal([tf.size(X), h1size], name='weights')
-        biases = tf.Variable(tf.zeros([h1size]), name='biases')
+        biases = tf.zeros([h1size], tf.float32)
         hidden1 = tf.nn.relu(tf.matmul(X, weights) + biases)
+        print("hidden1", hidden1)
         
     with tf.name_scope('output'):
-        weights = tf.random_normal([h1size], name='weights')
-        bias = tf.Variable(0, name='bias', dtype=tf.float32)
-        output = tf.Variable((hidden1 * weights) + bias)
+        weights = tf.random_normal([h1size, 1], name='weights')
+        print("weightmatrix", weights)
+        bias = tf.constant(0, name='bias', dtype=tf.float32)
+        output = tf.Variable(tf.matmul(hidden1, weights) + bias)
     
     return output
 
@@ -35,11 +37,11 @@ def loss(X, target):
 def main():
     inputVarNum = 5
     learning_rate = 0.05
-    trainX = tf.expand_dims(tf.Variable([1.0, 2.0, 3.0, 4.0, 5.0], dtype=tf.float32), 0)
-    targetVal = tf.constant(0, dtype=tf.float32)
+    trainX = tf.Variable([[1,1,1,1,1]], dtype=tf.float32)
+    targetVal = tf.constant(30, dtype=tf.float32)
     
     
-    inputPlaceholder = tf.placeholder(tf.float32, shape=[5])
+    inputPlaceholder = tf.constant([[1,2,3,4,5]], dtype=tf.float32, name='input')
     netGraph = getNetGraph(inputPlaceholder, 5)
     
     lossVal = loss(netGraph, targetVal)
@@ -50,12 +52,12 @@ def main():
     init = tf.global_variables_initializer()
     
     sess.run(init)
-#    
-#    for epoch in range(10):
-#        sess.run(trainOp, feed_dict={inputPlaceholder : trainX})
-#        
+    
+    for epoch in range(1000):
+        sess.run(trainOp)
         
-    print(sess.run(netGraph, {inputPlaceholder: trainX}))
+        
+    print(sess.run(netGraph))
     
     sess.close()
     
