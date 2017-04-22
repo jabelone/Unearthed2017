@@ -32,21 +32,22 @@ for i, dataset in enumerate(files):
         print(currentWell)
 
         for index, row in enumerate(reader):
+            iteration += 1
             if "NULL" in row:
                 nulls += 1
                 continue
             sanitisedCSV.append({})
-            sanitisedCSV[index]["Well"] = currentWell
-            sanitisedCSV[index]["Downhole Gauge Pressure"] = row["Downhole Gauge Pressure"]
-            sanitisedCSV[index]["Casing Pressure"] = row["Casing Pressure"]
-            sanitisedCSV[index]["Gas Flow (Volume)"] = row["Gas Flow (Volume)"]
-            sanitisedCSV[index]["Motor Speed"] = row["Motor Speed"]
-            sanitisedCSV[index]["Motor Torque"] = row["Motor Torque"]
-            sanitisedCSV[index]["Pump Speed Actual"] = row["Pump Speed Actual"]
-            sanitisedCSV[index]["Tubing Flow Meter"] = row["Tubing Flow Meter"]
-            sanitisedCSV[index]["Tubing Pressure"] = row["Tubing Pressure"]
-            sanitisedCSV[index]["Tubing Size Type"] = row["Tubing Size Type"]
-            sanitisedCSV[index]["Water Flow Mag from Separator"] = row["Water Flow Mag from Separator"]
+            sanitisedCSV[iteration]["Well"] = currentWell
+            sanitisedCSV[iteration]["Downhole Gauge Pressure"] = row["Downhole Gauge Pressure"]
+            sanitisedCSV[iteration]["Casing Pressure"] = row["Casing Pressure"]
+            sanitisedCSV[iteration]["Gas Flow (Volume)"] = row["Gas Flow (Volume)"]
+            sanitisedCSV[iteration]["Motor Speed"] = row["Motor Speed"]
+            sanitisedCSV[iteration]["Motor Torque"] = row["Motor Torque"]
+            sanitisedCSV[iteration]["Pump Speed Actual"] = row["Pump Speed Actual"]
+            sanitisedCSV[iteration]["Tubing Flow Meter"] = row["Tubing Flow Meter"]
+            sanitisedCSV[iteration]["Tubing Pressure"] = row["Tubing Pressure"]
+            sanitisedCSV[iteration]["Tubing Size Type"] = row["Tubing Size Type"]
+            sanitisedCSV[iteration]["Water Flow Mag from Separator"] = row["Water Flow Mag from Separator"]
 
         print("Found {} nulls in this dataset.  I have purged the unwanted.".format(nulls))
 
