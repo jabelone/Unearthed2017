@@ -31,33 +31,56 @@ def loss(X, target):
     #squared loss
     return tf.pow(X - target, 2)
 
+def pruneRow(row, columnIndexes, targetColIndex):
+    return ([row[index] for index in columnIndexes], row[targetColIndex])
 
+featuresColNames = ['Casing Pressure',
+                    'Gas Flow (Volume)',
+                    'Motor Speed',
+                    'Motor Torque',
+                    'Pump Speed Actual',
+                    'Tubing Flow Meter',
+                    'Tubing Pressure',
+                    'Water Flow Mag from Separator']
+targetColName = 'Downhole Gauge Pressure'
 
-learning_rate = 0.005
-hiddenLayerSize = 5
+with open('D:/unearthed/Bottom Hole Pressure and Fluid Level Challenge/Data/Well1B3mths.csv',
+              newline='') as csvfile:
 
-trainX = tf.constant([[1,1,1,1,1]], dtype=tf.float32, shape=[1,5], name='input')
-targetVal = tf.constant(30, dtype=tf.float32)
+    csvreader = csv.reader(csvfile)
 
+    allColNames = next(csvreader)
+    featuresColIndexes = [allColNames.index(name) for name in featuresColNames]
+    targetColIndex = allColNames.index(targetColName)
 
-inputPlaceholder = tf.placeholder(tf.float32, shape = [1,5])
-netGraph = getNetGraph(inputPlaceholder, hiddenLayerSize)
+    print("feature column indexes", featuresColIndexes)
+    print("target column index", targetColIndex)
+    csvfile.close()
 
-lossVal = loss(netGraph, targetVal)
-trainOp = tf.train.GradientDescentOptimizer(learning_rate).minimize(lossVal)
+    learning_rate = 0.005
+    learning_iterations = 1000
+    hiddenLayerSize = 5
 
-global sess
-sess = tf.Session()
-init = tf.global_variables_initializer()
+    trainX = [[1,2,3,4,5]]
+    target = [[30]]
 
-sess.run(init, feed_dict={inputPlaceholder: [[1,2,3,4,5]]})
-#
-#for epoch in range(1000):
-#    sess.run(trainOp, feed_dict={inputPlaceholder: trainX})
+    targetPlaceholder = tf.placeholder(tf.float32, shape=[1,1])
+    inputPlaceholder = tf.placeholder(tf.float32, shape = [1,len(featuresColIndexes)])
+    netGraph = getNetGraph(inputPlaceholder, hiddenLayerSize)
 
+    lossVal = loss(netGraph, targetPlaceholder)
+    trainOp = tf.train.GradientDescentOptimizer(learning_rate).minimize(lossVal)
 
-print(sess.run(netGraph, feed_dict={inputPlaceholder: [[1,2,3,4,5]]}))
+    sess = tf.Session()
+    init = tf.global_variables_initializer()
 
-sess.close()
-    
+    sess.run(init, feed_dict={inputPlaceholder: trainX, targetPlaceholder: target})
+
+    for epoch in range(learning_iterations):
+        sess.run(trainOp, feed_dict={inputPlaceholder: trainX, targetPlaceholder: target})
+
+    print(sess.run(netGraph, feed_dict={inputPlaceholder: trainX, targetPlaceholder: target}))
+
+    sess.close()
+
 
