@@ -15,22 +15,23 @@ import time
 
 
 def getNetGraph(X, h1size):
-    with tf.name_scope('hidden'):
-        weights = tf.Variable(tf.random_normal([tf.size(X), h1size]), name='weights')
-        biases = tf.Variable(tf.zeros([1, h1size], tf.float32), name='biases')
-        hidden1 = tf.matmul(X, weights) + biases
+    h1_weights = tf.Variable(tf.random_normal([tf.size(X), h1size]), name='h1_weights')
+    h1_weights = tf.Print(h1_weights, [h1_weights])
+    h1_biases = tf.Variable(tf.zeros([1, h1size], tf.float32), name='h1_biases')
+    h1_preactivation = tf.Variable(tf.add(tf.matmul(X, h1_weights), h1_biases), name='h1_preactivation')
+    hidden1 = tf.nn.relu(h1_preactivation)
 
-    with tf.name_scope('output'):
-        weights = tf.Variable(tf.random_normal([h1size, 1]), name='weights')
-#        weights = tf.Print(weights, [weights])
-        bias = tf.Variable(0.00, tf.float32, name='bias')
-        output = tf.matmul(hidden1, weights) + bias
+    out_weights = tf.Variable(tf.random_normal([h1size, 1]), name='out_weights')
+    out_bias = tf.Variable(0.00, tf.float32, name='out_bias')
+    output = tf.matmul(hidden1, out_weights) + out_bias
     
     return output
 
 def loss(X, target):
     #abs loss
-    return tf.abs(target - X)
+    difference = target - X
+#    difference = tf.Print(difference, [difference])
+    return tf.abs(difference)
 
 def pruneRow(row, columnIndexes, targetColIndex):
     prunedRow = [0 if row[index] == 'NULL' else row[index] for index in columnIndexes]
@@ -46,7 +47,7 @@ featuresColNames = ['Casing Pressure',
                     'Water Flow Mag from Separator']
 targetColName = 'Downhole Gauge Pressure'
 
-with open('D:/UnearthedWellData/Well1C3mths.csv',
+with open('D:/UnearthedWellData/Well1B3mths.csv',
               newline='') as csvFile:
 
     csvReader = csv.reader(csvFile)
@@ -58,7 +59,7 @@ with open('D:/UnearthedWellData/Well1C3mths.csv',
     print("feature column indexes", featuresColIndexes)
     print("target column index", targetColIndex)
 
-    learning_rate = 0.0001
+    learning_rate = 0.01
     learning_iterations = 100
     hiddenLayerSize = 8
     
@@ -69,7 +70,7 @@ with open('D:/UnearthedWellData/Well1C3mths.csv',
     trainX = [[1,2,3,4,5,6,7,8]]
     target = [[30]]
 
-    tf.set_random_seed(time.time())
+#    tf.set_random_seed(time.time())
     
     targetPlaceholder = tf.placeholder(tf.float32, shape=[1,1], name='phTarget')
     inputPlaceholder = tf.placeholder(tf.float32, shape = [1,len(featuresColIndexes)], name='phIn')
@@ -91,7 +92,7 @@ with open('D:/UnearthedWellData/Well1C3mths.csv',
     x = 0
     for line in csvReader:
         x = x + 1
-        if x > 15000: pass
+        if x > 10: break
         pruned = pruneRow(line, featuresColIndexes, targetColIndex)
         
         if (x % 2 == 1):
@@ -105,7 +106,7 @@ with open('D:/UnearthedWellData/Well1C3mths.csv',
 #        print(sess.run(lossVal, feed_dict={inputPlaceholder: [pruned[0]],
 #                                         targetPlaceholder: [[pruned[1]]]}))
 
-    for i in range(1000):
+    for i in range(100):
         testRow = testSet[i]
         print ("Test Row " + str(i) + ":", testRow[1])
         print(sess.run(netGraph, feed_dict={inputPlaceholder: [testRow[0]]}))
