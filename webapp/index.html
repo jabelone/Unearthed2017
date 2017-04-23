@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -90,6 +91,7 @@
 		 div#levelTitle {
 		 	height:40px;
 		 	line-height:40px;
+		 	font-size:1.4em;
 		 }
 
          div#content div#cwrapper div#main div#txt
@@ -199,7 +201,7 @@
                         	<div id="levelTitle">
                      			<span id="title">Water Level above pump:</span>
                      		</div>
-                           <span id = "reading">122.22</span>
+                           <span id = "reading">____</span>
                            <span id = "unit">m</span>	
                         </div>
                         <div id="panelWrapper">
@@ -209,7 +211,7 @@
                      					<span id = "lab">Accuracy:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">95.00</span>
+                     					<span id="val">____</span>
                      					<span id="siunit">%</span>
                      				</div>
                      			</div>
@@ -218,7 +220,7 @@
                      				<span id = "lab">Estimated Pressure:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">1223.23</span>
+                     					<span id="val">____</span>
                      					<span id="siunit">kPa</span>
                      				</div>
                      			</div>
@@ -227,7 +229,7 @@
                      					<span id = "lab">True Pressure:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">1202.3</span>
+                     					<span id="val">____</span>
                      					<span id="siunit">kPa</span>
                      				</div>
                      			</div>
@@ -277,20 +279,22 @@
       	var a = new XMLHttpRequest();
       	var b = {};
       	var dom = [
-      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#waterLevel>span#reading', dlabel: 'cpress'},
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#waterLevel>span#reading', dlabel: 'wlevel'},
       	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_1>div#valueLabel>span#val',
       	dlabel:'alevel'}, 
 
       	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_2>div#valueLabel>span#val',
-      	dlabel:'wlevel'},
+      	dlabel:'epress'},
 
       	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_3>div#valueLabel>span#val',
-      	dlabel:'dlevel'}];
+      	dlabel:'tpress'}];
 
+		setInterval(function() {
 
-      	
-      	
-      	
+			a.open("GET", "data/live.json");
+			a.send();
+
+		}, 1000);      	
 
       	function render() {
       		for(var x = 0; x < dom.length; x++) {
