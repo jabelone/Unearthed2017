@@ -90,7 +90,7 @@ with tf.Session() as sess:
     
     # Training cycle
     for epoch in range(training_epochs):
-        with open('D:/UnearthedWellData/Well1B3mths.csv',
+        with open('~/yourdata/UnearthedWellData/Well1B3mths.csv',
               newline='') as csvFile: 
             csvReader = csv.reader(csvFile)
             next(csvReader) #skip header         
