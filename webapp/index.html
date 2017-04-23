@@ -71,17 +71,25 @@
          div#content div#cwrapper div#main div#txt>div#txtWrapper {
 	         position: relative;
 	         top: 25%;
-	         height: 200px;
+	         height: 240px;
 	         text-align: center;
 	         line-height:140px;
 	         overflow:hidden;
          }
-         div#content div#cwrapper div#main div#txt div#txtWrapper div#pressure {
+         div#content div#cwrapper div#main div#txt div#txtWrapper div#waterLevel {
+             position: relative;
              background: #000;
 			 color: #eee;
-			 height: 140px;
+			 height: 180px;
 			 width: 590px;
 			 margin: auto;
+			 top:0;
+		 }
+
+		 div#content div#cwrapper div#main div#txt div#txtWrapper div#waterLevel
+		 div#levelTitle {
+		 	height:40px;
+		 	line-height:40px;
 		 }
 
          div#content div#cwrapper div#main div#txt
@@ -100,6 +108,7 @@
 		    height: 60px;
 		    margin: auto;
 		    background:#000;
+		    top:0;
          }
 		
 		div#content div#cwrapper div#main div#txt
@@ -178,7 +187,7 @@
                </div>
             </div>
             <div id="title">
-               <span>Live Casing Pressure</span>	
+               <span>Live Drill Info</span>	
             </div>
          </div>
          <div id="content">
@@ -186,9 +195,12 @@
                <div id="main">
                   <div id = "txt">
                      <div id = "txtWrapper">
-                        <div id="pressure">
-                           <span id = "reading">1223.42</span>
-                           <span id = "unit">kPa</span>	
+                        <div id="waterLevel">
+                        	<div id="levelTitle">
+                     			<span id="title">Water Level above pump:</span>
+                     		</div>
+                           <span id = "reading">122.22</span>
+                           <span id = "unit">m</span>	
                         </div>
                         <div id="panelWrapper">
                      		<div id="panels">
@@ -197,26 +209,26 @@
                      					<span id = "lab">Accuracy:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">95</span>
+                     					<span id="val">95.00</span>
                      					<span id="siunit">%</span>
                      				</div>
                      			</div>
                      			<div id="panel_2">
                      				<div id="panelLabel">
-                     					<span id = "lab">Water Level:</span>
+                     				<span id = "lab">Estimated Pressure:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">207.97</span>
-                     					<span id="siunit">L</span>
+                     					<span id="val">1223.23</span>
+                     					<span id="siunit">kPa</span>
                      				</div>
                      			</div>
                      			<div id="panel_3">
                      				<div id="panelLabel">
-                     					<span id = "lab">Depth:</span>
+                     					<span id = "lab">True Pressure:</span>
                      				</div>
                      				<div id="valueLabel">
-                     					<span id="val">185</span>
-                     					<span id="siunit">m</span>
+                     					<span id="val">1202.3</span>
+                     					<span id="siunit">kPa</span>
                      				</div>
                      			</div>
                      		</div>
@@ -265,7 +277,7 @@
       	var a = new XMLHttpRequest();
       	var b = {};
       	var dom = [
-      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#pressure>span#reading', dlabel: 'cpress'},
+      	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#waterLevel>span#reading', dlabel: 'cpress'},
       	{DOM:'div#content>div#cwrapper>div#main>div#txt>div#txtWrapper>div#panelWrapper div#panels>div#panel_1>div#valueLabel>span#val',
       	dlabel:'alevel'}, 
 
@@ -276,10 +288,7 @@
       	dlabel:'dlevel'}];
 
 
-      	setInterval(function() {
-      		a.open("GET", "data/live.json");
-      		a.send();	
-      	}, 500);
+      	
       	
       	
 
