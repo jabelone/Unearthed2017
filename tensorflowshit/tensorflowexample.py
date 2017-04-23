@@ -19,7 +19,7 @@ batch_size = 100
 display_step = 1
 
 # Network Parameters
-n_hidden_1 = 256 # 1st layer number of features
+n_hidden_1 = 8 # 1st layer number of features
 n_input = 8 # MNIST data input (img shape: 28*28)
 n_classes = 1
 
@@ -98,7 +98,7 @@ with tf.Session() as sess:
             rowNum = 0
             for line in csvReader:  
                 rowNum += 1
-                if rowNum > 10000: pass
+                if rowNum > 10000: break
                     
                 pruned = pruneRow(line, featuresColIndexes, targetColIndex)
                 if (rowNum % 2) == 0: testSet.append(pruned)
