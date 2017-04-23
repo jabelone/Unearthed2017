@@ -94,3 +94,5 @@ ENV/
 .idea/workspace.xml
 *.csv
 ~$Fluid Level - Data Dictionary.xlsx
+sanitisedData.txt
+sanitisedTestData.txt
